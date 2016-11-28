@@ -19,12 +19,12 @@ namespace HVH.Service
         public ClientService()
         {
             AutoLog = true;
-            this.CanHandlePowerEvent = true;
-            this.CanHandleSessionChangeEvent = true;
-            this.CanPauseAndContinue = true;
-            this.CanShutdown = true;
-            this.CanStop = true;
-            this.ServiceName = "HVH.Service";
+            CanHandlePowerEvent = true;
+            CanHandleSessionChangeEvent = true;
+            CanPauseAndContinue = true;
+            CanShutdown = true;
+            CanStop = true;
+            ServiceName = "HVH.Service";
         }
     }
 }
