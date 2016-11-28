@@ -4,6 +4,7 @@
  * Licensed under the terms of the MIT License (Dorian Stoll), or All Rights Reserved (Kai Münch)
  */
 
+using System;
 using System.ServiceProcess;
 
 namespace HVH.Service
@@ -25,6 +26,14 @@ namespace HVH.Service
             CanShutdown = true;
             CanStop = true;
             ServiceName = "HVH.Service";
+        }
+
+        /// <summary>
+        /// Called when the service is started. Loads settings, and tries to connect to the server
+        /// </summary>
+        protected override void OnStart(String[] args)
+        {
+
         }
     }
 }

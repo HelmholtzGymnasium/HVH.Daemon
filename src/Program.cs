@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿/**
+ * HVH.Service - Service that can manage client computers
+ * Copyright (c) Kai Münch, Dorian Stoll 2016
+ * Licensed under the terms of the MIT License (Dorian Stoll), or All Rights Reserved (Kai Münch)
+ */
+
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HVH.Service
 {
@@ -19,7 +20,7 @@ namespace HVH.Service
         {
             ServiceBase[] ServicesToRun = 
             {
-                new ohasffaso()
+                new ClientService()
             };
             ServiceBase.Run(ServicesToRun);
         }
