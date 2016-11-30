@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Configuration.Install;
 using System.ServiceProcess;
 
-namespace HVH.Service
+namespace HVH.Service.Service
 {
     /// <summary>
     /// The class that registers our management service in windows (or linux)

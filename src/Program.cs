@@ -5,6 +5,7 @@
  */
 
 using System.ServiceProcess;
+using HVH.Service.Service;
 
 namespace HVH.Service
 {

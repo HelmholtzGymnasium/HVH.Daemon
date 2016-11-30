@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Helios, Version=2.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Helios.2.1.3\lib\net45\Helios.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MadMilkman.Ini, Version=1.0.6.0, Culture=neutral, PublicKeyToken=4e0b5157a7ffbb74, processorArchitecture=MSIL">
       <HintPath>..\packages\MadMilkman.Ini.1.0.6.0\lib\net20\MadMilkman.Ini.dll</HintPath>
       <Private>True</Private>
@@ -44,15 +48,21 @@
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientService.cs">
+    <Compile Include="Encryption\RSAEncryptionProvider.cs" />
+    <Compile Include="Service\ClientService.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Connection\ConnectionWorker.cs" />
+    <Compile Include="Exceptions\InvalidSettingsFileException.cs" />
+    <Compile Include="Interfaces\IEncryptionProvider.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectInstaller.cs">
+    <Compile Include="Service\ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\ProgramSettings.cs" />
+    <Compile Include="Settings\ConnectionSettings.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
