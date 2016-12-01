@@ -1,7 +1,7 @@
 ﻿/**
  * HVH.Service - Service that can manage client computers
  * Copyright (c) Kai Münch, Dorian Stoll 2016
- * Licensed under the terms of the MIT License (Dorian Stoll), or All Rights Reserved (Kai Münch)
+ * Licensed under the terms of the MIT License (Dorian Stoll)
  */
 
 using System.ComponentModel;
