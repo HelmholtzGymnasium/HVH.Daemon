@@ -9,13 +9,13 @@ using MadMilkman.Ini;
 
 namespace HVH.Service.Settings
 {
-    [SectionName("connection")]
-    public class ConnectionSettings : Settings<ConnectionSettings>
+    [SectionName("security")]
+    public class SecuritySettings : Settings<SecuritySettings>
     {
-        [IniSerialization("server")]
-        public String server { get; set; }
+        [IniSerialization("keySize")]
+        public Int32 keySize { get; set; }
 
-        [IniSerialization("port")]
-        public Int32 port { get; set; }
+        [IniSerialization("encryption")]
+        public String encryption { get; set; }
     }
 }
