@@ -48,7 +48,10 @@
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection\Communication.cs" />
+    <Compile Include="Encryption\NoneEncryptionProvider.cs" />
     <Compile Include="Encryption\RSAEncryptionProvider.cs" />
+    <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Service\ClientService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -60,6 +63,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\SecuritySettings.cs" />
     <Compile Include="Settings\ConnectionSettings.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Utility.cs" />
