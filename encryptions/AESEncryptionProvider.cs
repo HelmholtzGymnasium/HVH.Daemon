@@ -12,9 +12,9 @@ using HVH.Service.Interfaces;
 namespace HVH.Service.Encryptions
 {
     /// <summary>
-    /// Provides encryption through DES
+    /// Provides encryption through AES
     /// </summary>
-    public class DESEncryptionProvider : IEncryptionProvider
+    public class AESEncryptionProvider : IEncryptionProvider
     {
         /// <summary>
         /// The underlying key
@@ -23,12 +23,12 @@ namespace HVH.Service.Encryptions
 
         public Byte[] Encrypt(Byte[] data)
         {
-            return Cryptography.Encrypt<DESCryptoServiceProvider>(data, key);
+            return Cryptography.Encrypt<AesCryptoServiceProvider>(data, key);
         }
 
         public Byte[] Decrypt(Byte[] data)
         {
-            return Cryptography.Decrypt<DESCryptoServiceProvider>(data, key);
+            return Cryptography.Decrypt<AesCryptoServiceProvider>(data, key);
         }
 
         public void ChangeKey(Byte[] newKey)

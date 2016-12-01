@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Service", "src/HVH.Service.csproj", "{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Service", "src\HVH.Service.csproj", "{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Service.Encryptions", "encryptions\HVH.Service.Encryptions.csproj", "{FECEAD95-233F-424A-83DD-3903D29FD080}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECEAD95-233F-424A-83DD-3903D29FD080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECEAD95-233F-424A-83DD-3903D29FD080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECEAD95-233F-424A-83DD-3903D29FD080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECEAD95-233F-424A-83DD-3903D29FD080}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
