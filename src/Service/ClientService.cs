@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using Helios.Net;
@@ -106,6 +107,44 @@ namespace HVH.Service.Service
                     connection.Send(Environment.UserName, networkData.RemoteHost, encryption); // TODO: This doesnt work. We need a Windows API call for that
                 }
             }
+            else if (messageBacklog.Any())
+            {
+                if (messageBacklog[0] == Communication.SERVER_SEND_SESSION_KEY)
+                {
+                    // Load the Encoder Type
+                    Type encoderType = PluginManager.GetType<IEncryptionProvider>(SecuritySettings.Instance.encryption);
+                    encryption = (IEncryptionProvider) Activator.CreateInstance(encoderType);
+
+                    // Apply session key
+                    encryption.ChangeKey(buffer);
+
+                    // Send session Data
+                    connection.Send(Communication.CLIENT_SEND_SESSION_DATA, networkData.RemoteHost, encryption);
+                    connection.Send(Environment.MachineName, networkData.RemoteHost, encryption);
+                    connection.Send(Environment.UserName, networkData.RemoteHost, encryption);
+                    connection.Send(Communication.CLIENT_ID, networkData.RemoteHost, encryption);
+                    sessionDataPending = true;
+
+                    messageBacklog.Clear();
+                }
+                else if (!SessionCreated && sessionDataPending && messageBacklog[0] == Communication.SERVER_SEND_SESSION_CREATED)
+                {
+                    String message = Encoding.UTF8.GetString(buffer);
+                    if (message == Communication.SERVER_ID)
+                    {
+                        sessionDataPending = false;
+                        SessionCreated = true;
+                    }
+                    else
+                    {
+                        // Invalid connection
+                        Stop();
+                    }
+
+                    // Clear
+                    messageBacklog.Clear();
+                }
+            }
         }
 
         /// <summary>
@@ -119,6 +158,14 @@ namespace HVH.Service.Service
             encryption = rsa;
             connection.Send(Communication.CLIENT_SEND_PUBLIC_KEY, node, new NoneEncryptionProvider());
             connection.Send(rsa.key.ToXmlString(false), node, new NoneEncryptionProvider());
+        }
+
+        /// <summary>
+        /// Finalizes the connection
+        /// </summary>
+        protected override void OnStop()
+        {
+            Connection.Client.Close();
         }
     }
 }
