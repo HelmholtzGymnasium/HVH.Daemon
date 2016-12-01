@@ -6,28 +6,34 @@
 
 using System;
 using System.Security.Cryptography;
+using System.Text;
 using HVH.Service.Interfaces;
 
-namespace HVH.Service.Encryption
+namespace HVH.Service.Encryptions
 {
     /// <summary>
-    /// IEncryptionProvider shim for no encryption
+    /// Provides encryption through DES
     /// </summary>
-    public class NoneEncryptionProvider  : IEncryptionProvider
+    public class DESEncryptionProvider : IEncryptionProvider
     {
+        /// <summary>
+        /// The underlying key
+        /// </summary>
+        private String key;
+
         public Byte[] Encrypt(Byte[] data)
         {
-            return data;
+            return Cryptography.Encrypt<DESCryptoServiceProvider>(data, key);
         }
 
         public Byte[] Decrypt(Byte[] data)
         {
-            return data;
+            return Cryptography.Decrypt<DESCryptoServiceProvider>(data, key);
         }
 
         public void ChangeKey(Byte[] newKey)
         {
-            // ignored
+            key = Encoding.UTF8.GetString(newKey);
         }
     }
 }

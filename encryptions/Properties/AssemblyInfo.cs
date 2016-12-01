@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("HVH.Service")]
-[assembly: AssemblyDescription("Service for managing client computers")]
+[assembly: AssemblyTitle("HVH.Service.Encryption.Common")]
+[assembly: AssemblyDescription("Common methods for encryption providers")]
 [assembly: AssemblyCompany("Hermann von Helmholtz Gymnasium")]
-[assembly: AssemblyProduct("HVH.Service")]
+[assembly: AssemblyProduct("HVH.Service.Encryption.Common")]
 [assembly: AssemblyCopyright("Copyright © Dorian Stoll 2016")]
 [assembly: ComVisible(false)]
-[assembly: Guid("b0bf3eac-c203-4de0-b7dc-bfc46149ec49")]
+[assembly: Guid("fecead95-233f-424a-83dd-3903d29fd080")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
