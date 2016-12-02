@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Service", "src\HVH.Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Service.Encryptions", "encryptions\HVH.Service.Encryptions.csproj", "{FECEAD95-233F-424A-83DD-3903D29FD080}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Service.Lock", "screenlock\HVH.Service.Lock.csproj", "{EDE96712-6B34-4590-8EB7-4EB24B9055F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FECEAD95-233F-424A-83DD-3903D29FD080}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FECEAD95-233F-424A-83DD-3903D29FD080}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FECEAD95-233F-424A-83DD-3903D29FD080}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE96712-6B34-4590-8EB7-4EB24B9055F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE96712-6B34-4590-8EB7-4EB24B9055F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE96712-6B34-4590-8EB7-4EB24B9055F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE96712-6B34-4590-8EB7-4EB24B9055F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

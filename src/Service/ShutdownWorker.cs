@@ -1,4 +1,10 @@
-﻿using System;
+﻿/**
+ * HVH.Service - Service that can manage client computers
+ * Copyright (c) Dorian Stoll 2016
+ * Licensed under the terms of the MIT License
+ */
+
+using System;
 using System.Diagnostics;
 
 namespace HVH.Service.Service

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}</ProjectGuid>
+    <ProjectGuid>{EDE96712-6B34-4590-8EB7-4EB24B9055F9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HVH.Service</RootNamespace>
-    <AssemblyName>HVH.Service</AssemblyName>
+    <RootNamespace>HVH.Service.Lock</RootNamespace>
+    <AssemblyName>HVH.Service.Lock</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,49 +32,23 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Helios, Version=2.1.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Helios.2.1.3\lib\net45\Helios.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MadMilkman.Ini, Version=1.0.6.0, Culture=neutral, PublicKeyToken=4e0b5157a7ffbb74, processorArchitecture=MSIL">
-      <HintPath>..\packages\MadMilkman.Ini.1.0.6.0\lib\net20\MadMilkman.Ini.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection\Communication.cs" />
-    <Compile Include="Encryption\NoneEncryptionProvider.cs" />
-    <Compile Include="Encryption\RSAEncryptionProvider.cs" />
-    <Compile Include="Plugins\PluginManager.cs" />
-    <Compile Include="Service\ClientService.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Connection\ConnectionWorker.cs" />
-    <Compile Include="Exceptions\InvalidSettingsFileException.cs" />
-    <Compile Include="Interfaces\IEncryptionProvider.cs" />
+    <Compile Include="Keyboard.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Service\LockWorker.cs" />
-    <Compile Include="Service\ProjectInstaller.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\ShutdownWorker.cs" />
-    <Compile Include="Settings\SecuritySettings.cs" />
-    <Compile Include="Settings\ConnectionSettings.cs" />
-    <Compile Include="Settings\Settings.cs" />
-    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
