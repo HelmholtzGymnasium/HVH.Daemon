@@ -144,6 +144,20 @@ namespace HVH.Service.Service
                     // Clear
                     messageBacklog.Clear();
                 }
+                else if (messageBacklog[0] == Communication.SERVER_SEND_SHUTDOWN)
+                {
+                    Int32 delay = 0;
+                    String message = Encoding.UTF8.GetString(buffer);
+                    Int32.TryParse(message, out delay);
+                    ShutdownWorker.Shutdown(delay);
+                }
+                else if (messageBacklog[0] == Communication.SERVER_SEND_REBOOT)
+                {
+                    Int32 delay = 0;
+                    String message = Encoding.UTF8.GetString(buffer);
+                    Int32.TryParse(message, out delay);
+                    ShutdownWorker.Reboot(delay);
+                }
             }
         }
 

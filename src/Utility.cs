@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using Helios.Net;
@@ -40,6 +41,17 @@ namespace HVH.Service
                 buffer = encryption.Encrypt(buffer);
             }
             connection.Send(buffer, 0, buffer.Length, node);
+        }
+
+        /// <summary>
+        /// Runs an executable in the background
+        /// </summary>
+        public static Process Run(String exe, String args)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo(exe, args);
+            psi.CreateNoWindow = true;
+            psi.UseShellExecute = true;
+            return Process.Start(psi);
         }
     }
 }
