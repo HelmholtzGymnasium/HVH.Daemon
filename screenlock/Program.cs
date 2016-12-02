@@ -76,7 +76,9 @@ namespace HVH.Service.Lock
                 }
             };
             Cursor.Hide();
-            //using (KeyboardHook hook = new KeyboardHook(KeyboardHook.Parameters.None))
+#if !DEBUG
+            using (KeyboardHook hook = new KeyboardHook(KeyboardHook.Parameters.None))
+#endif
                 Application.Run(blockForm);
         }
 
