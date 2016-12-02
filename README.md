@@ -5,7 +5,8 @@ HVH.Service provides the execution components of the system. It works by connect
 
 ### Configuration
 The app reads its settings from an ini file, called settings.ini. This is an example config:
-```[connection]
+```
+[connection]
 server=192.168.99.1
 port=77799
 
