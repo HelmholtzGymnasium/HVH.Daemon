@@ -4,6 +4,7 @@
  * Licensed under the terms of the MIT License
  */
 
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -15,15 +16,21 @@ namespace HVH.Service.Service
         // the process of the app that locks the screen
         private static Process locker;
 
+        // Locks access to make the object threadsafe
+        private static Object lockObject = new Object();
+
         /// <summary>
         /// Creates the lockfile and the locking process
         /// </summary>
         public static void LockScreen()
         {
-            if (locker == null)
+            lock (lockObject)
             {
-                locker = Utility.Run("HVH.Service.Lock.exe", "");
-                File.Create(Directory.GetCurrentDirectory() + "/screen.lock");
+                if (locker == null)
+                {
+                    locker = Utility.Run("HVH.Service.Lock.exe", "");
+                    File.Create(Directory.GetCurrentDirectory() + "/screen.lock");
+                }
             }
         }
 
@@ -32,10 +39,14 @@ namespace HVH.Service.Service
         /// </summary>
         public static void UnlockScreen()
         {
-            if (locker != null)
+            lock (lockObject)
             {
-                locker.Close();
-                File.Delete(Directory.GetCurrentDirectory() + "/screen.lock");
+                if (locker != null)
+                {
+                    locker.Close();
+                    locker = null;
+                    File.Delete(Directory.GetCurrentDirectory() + "/screen.lock");
+                }
             }
         }
 

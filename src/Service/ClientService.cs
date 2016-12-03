@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using Helios.Net;
 using Helios.Topology;
 using HVH.Service.Connection;
@@ -44,11 +45,18 @@ namespace HVH.Service.Service
         /// </summary>
         public Boolean SessionCreated { get; set; }
 
+        /// <summary>
+        /// The threads created by the application
+        /// </summary>
+        public List<Thread> Threads { get; set; }
+
         // The last message received from the server
         private List<String> messageBacklog;
 
         // Whether we sent data to the server, waiting for an answer
         private Boolean sessionDataPending = false;
+
+
 
         /// <summary>
         /// Create a new Instance of the service
@@ -65,6 +73,7 @@ namespace HVH.Service.Service
 
             Instance = this;
             PluginManager.LoadPlugins();
+            Threads = new List<Thread>();
         }
 
         /// <summary>
@@ -76,6 +85,7 @@ namespace HVH.Service.Service
             worker.Established = ConnectionEstablished;
             worker.Received = DataReceived;
             SessionCreated = false;
+            Threads.Add(Utility.StartThread(LockWorker.Check, true));
         }
 
         /// <summary>
@@ -105,6 +115,19 @@ namespace HVH.Service.Service
                 {
                     connection.Send(Communication.CLIENT_SEND_HEARTBEAT, networkData.RemoteHost, encryption);
                     connection.Send(Environment.UserName, networkData.RemoteHost, encryption); // TODO: This doesnt work. We need a Windows API call for that
+                    messageBacklog.Clear();
+                }
+                else if (message == Communication.SERVER_SEND_LOCK)
+                {
+                    // Lock the screen
+                    LockWorker.LockScreen();
+                    messageBacklog.Clear();
+                }
+                else if (message == Communication.SERVER_SEND_UNLOCK)
+                {
+                    // Unlock the screen
+                    LockWorker.UnlockScreen();
+                    messageBacklog.Clear();
                 }
             }
             else if (messageBacklog.Any())
