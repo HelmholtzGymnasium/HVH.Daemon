@@ -51,7 +51,7 @@ namespace HVH.Service.Lock
                         DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
                         DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_MAXIMIZE, MF_BYCOMMAND);
                         DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_MINIMIZE, MF_BYCOMMAND);
-                        Console.WriteLine("Entering Emergency Mode...");
+                        Console.Title = "Emergency Mode";
                         while (true)
                         {
                             Console.WriteLine();
