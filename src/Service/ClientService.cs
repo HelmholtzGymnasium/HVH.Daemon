@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
@@ -70,6 +71,10 @@ namespace HVH.Service.Service
         /// </summary>
         public ClientService()
         {
+            // Create dirs
+            Directory.CreateDirectory("logs/");
+            Directory.CreateDirectory("plugins/");
+
             AutoLog = true;
             CanHandlePowerEvent = true;
             CanHandleSessionChangeEvent = true;
