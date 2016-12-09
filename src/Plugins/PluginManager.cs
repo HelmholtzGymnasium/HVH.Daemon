@@ -46,7 +46,7 @@ namespace HVH.Service.Plugins
         {
             foreach (Type t in assemblies.SelectMany(a => a.GetTypes()))
             {
-                if (t.Name == name && t.IsSubclassOf(typeof(T)))
+                if (t.Name == name && t.IsSubclassOf(typeof(T)) && t.IsPublic)
                     return t;
             }
 
