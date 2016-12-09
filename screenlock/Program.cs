@@ -5,10 +5,12 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using MjpegProcessor;
 using Timer = System.Timers.Timer;
 
 namespace HVH.Service.Lock
@@ -25,14 +27,61 @@ namespace HVH.Service.Lock
 
         public static void Main(String[] args)
         {
-            // Create a blocking form
-            Form blockForm = new Form();
-            blockForm.FormBorderStyle = FormBorderStyle.None;
-            blockForm.Size = blockForm.MinimumSize = blockForm.MaximumSize = new Size(Int32.MaxValue, Int32.MaxValue);
-            blockForm.BackColor = Color.Black;
-            blockForm.ForeColor = Color.Black;
-            //blockForm.TopMost = true;
-            //blockForm.ShowInTaskbar = false;
+            Form form = new Form();
+            if (args.Length == 0)
+            {
+                // Create a blocking form
+                form.FormBorderStyle = FormBorderStyle.None;
+                form.Size = form.MinimumSize = form.MaximumSize = new Size(Int32.MaxValue, Int32.MaxValue);
+                form.BackColor = Color.Black;
+                form.ForeColor = Color.Black;
+#if !DEBUG
+                form.ShowInTaskbar = false;
+                form.TopMost = true;
+#endif
+            }
+            else
+            {
+                // Create the picture box
+                PictureBox image = new PictureBox();
+                ((ISupportInitialize) image).BeginInit();
+                form.SuspendLayout();
+                image.Location = new Point(0, 0);
+                image.Size = Screen.PrimaryScreen.Bounds.Size; 
+                image.TabIndex = 0;
+                image.TabStop = false;
+                image.SizeMode = PictureBoxSizeMode.CenterImage;
+
+                // The rest of the form
+                form.BackColor = Color.Black;
+                form.Location = new Point(0, 0);
+                form.Size = form.MinimumSize = form.MaximumSize = Screen.PrimaryScreen.WorkingArea.Size;
+                form.Controls.Add(image);
+                form.FormBorderStyle = FormBorderStyle.None;
+                form.StartPosition = FormStartPosition.Manual;
+#if !DEBUG
+                form.ShowInTaskbar = false;
+                form.TopMost = true;
+#endif
+                ((ISupportInitialize) image).EndInit();
+                form.ResumeLayout(false);
+
+                // Listen to the mjpeg stream
+                MessageBox.Show(new Uri(args[0]).AbsoluteUri);
+                MjpegDecoder decoder = new MjpegDecoder();
+                try
+                {
+                    decoder.ParseStream(new Uri(args[0]));
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                }
+                decoder.FrameReady += delegate(Object sender, FrameReadyEventArgs eventArgs)
+                {
+                    image.Image = !emergencyMode ? eventArgs.Bitmap : null;
+                };
+            }
             Timer t = new Timer(5000);
             t.AutoReset = false;
             t.Elapsed += delegate
@@ -40,9 +89,9 @@ namespace HVH.Service.Lock
                 emergencyMode = false;
                 token = null;
                 counter = 0;
-                blockForm.Invoke(new Action(() => { blockForm.BackColor = blockForm.ForeColor = Color.Black; }));
+                form.Invoke(new Action(() => { form.BackColor = form.ForeColor = Color.Black; }));
             };
-            blockForm.KeyPress += delegate(Object sender, KeyPressEventArgs e)
+            form.KeyPress += delegate(Object sender, KeyPressEventArgs e)
             {
                 if (e.KeyChar == '0' && counter != 4 && ((DateTime.Now - time).TotalMilliseconds < 2000 || counter == 0) && !emergencyMode)
                 {
@@ -52,7 +101,7 @@ namespace HVH.Service.Lock
                     if (counter == 4)
                     {
                         // enter emergency mode - request admin password
-                        blockForm.BackColor = blockForm.ForeColor = Color.IndianRed;
+                        form.BackColor = form.ForeColor = Color.IndianRed;
                         emergencyMode = true;
                         token = "";
                         t.Start();
@@ -80,7 +129,7 @@ namespace HVH.Service.Lock
                         }
                         else
                         {
-                            blockForm.BackColor = blockForm.ForeColor = Color.Black;
+                            form.BackColor = form.ForeColor = Color.Black;
                             counter = 0;
                             emergencyMode = false;
                             token = null;
@@ -89,7 +138,7 @@ namespace HVH.Service.Lock
                 }
                 else
                 {
-                    blockForm.BackColor = blockForm.ForeColor = Color.Black;
+                    form.BackColor = form.ForeColor = Color.Black;
                     counter = 0;
                     emergencyMode = false;
                     token = null;
@@ -99,7 +148,7 @@ namespace HVH.Service.Lock
 #if !DEBUG
             using (KeyboardHook hook = new KeyboardHook(KeyboardHook.Parameters.None))
 #endif
-                Application.Run(blockForm);
+                Application.Run(form);
         }
     }
 }
