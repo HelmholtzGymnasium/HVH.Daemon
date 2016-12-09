@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using log4net.Config;
 
 [assembly: AssemblyTitle("HVH.Service.Lock")]
 [assembly: AssemblyDescription("Locks the screen of a client node")]
@@ -10,3 +11,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("fecead95-233f-424a-83dd-3903d29fd080")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: XmlConfigurator(Watch = true)]

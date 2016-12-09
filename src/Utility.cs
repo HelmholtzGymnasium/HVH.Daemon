@@ -6,11 +6,13 @@
 
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using Helios.Net;
 using Helios.Topology;
 using HVH.Service.Interfaces;
+using log4net;
 
 namespace HVH.Service
 {
@@ -20,6 +22,11 @@ namespace HVH.Service
     public static class Utility
     {
         /// <summary>
+        /// Logger
+        /// </summary>
+        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
         /// Starts a new thread
         /// </summary>
         public static Thread StartThread(ThreadStart start, Boolean background)
@@ -27,6 +34,7 @@ namespace HVH.Service
             Thread t = new Thread(start);
             t.IsBackground = background;
             t.Start();
+            log.DebugFormat("Started new thread: {0}", start.Method.Name);
             return t;
         }
 
@@ -40,6 +48,7 @@ namespace HVH.Service
             {
                 buffer = encryption.Encrypt(buffer);
             }
+            log.DebugFormat("Message sent. Length: {0}", buffer.Length);
             connection.Send(buffer, 0, buffer.Length, node);
         }
 
@@ -51,6 +60,7 @@ namespace HVH.Service
             ProcessStartInfo psi = new ProcessStartInfo(exe, args);
             psi.CreateNoWindow = true;
             psi.UseShellExecute = true;
+            log.InfoFormat("Starting process: {0}", exe + " " + args);
             return Process.Start(psi);
         }
     }

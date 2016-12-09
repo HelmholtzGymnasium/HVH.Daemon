@@ -9,7 +9,9 @@ using System.ComponentModel;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
+using log4net;
 using MjpegProcessor;
 using Timer = System.Timers.Timer;
 
@@ -19,7 +21,12 @@ namespace HVH.Service.Lock
     /// The main class of the program.
     /// </summary>
     public class Program
-    {
+    {        
+        /// <summary>
+        /// Logger
+        /// </summary>
+        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         private static Int32 counter;
         private static DateTime time;
         private static Boolean emergencyMode = false;
@@ -28,6 +35,7 @@ namespace HVH.Service.Lock
         public static void Main(String[] args)
         {
             Form form = new Form();
+            log.InfoFormat("Locking screen. MediaStream: {0}", args.Length != 0);
             if (args.Length == 0)
             {
                 // Create a blocking form
@@ -90,6 +98,7 @@ namespace HVH.Service.Lock
                 token = null;
                 counter = 0;
                 form.Invoke(new Action(() => { form.BackColor = form.ForeColor = Color.Black; }));
+                log.Info("Exiting emergency mode.");
             };
             form.KeyPress += delegate(Object sender, KeyPressEventArgs e)
             {
@@ -101,6 +110,7 @@ namespace HVH.Service.Lock
                     if (counter == 4)
                     {
                         // enter emergency mode - request admin password
+                        log.Info("Emergency Mode!");
                         form.BackColor = form.ForeColor = Color.IndianRed;
                         emergencyMode = true;
                         token = "";
@@ -124,11 +134,13 @@ namespace HVH.Service.Lock
                         PrincipalContext pc = new PrincipalContext(ContextType.Machine);
                         if (split.Length == 2 && pc.ValidateCredentials(split[0], split[1]))
                         {
+                            log.Info("Account data is correct, unlocking client computer");
                             File.Delete(Directory.GetCurrentDirectory() + "/screen.lock");
                             Environment.Exit(0); // Kill the lock
                         }
                         else
                         {
+                            log.Info("Account data is wrong, computer stays locked");
                             form.BackColor = form.ForeColor = Color.Black;
                             counter = 0;
                             emergencyMode = false;

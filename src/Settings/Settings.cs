@@ -6,7 +6,9 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using HVH.Service.Exceptions;
+using log4net;
 using MadMilkman.Ini;
 
 namespace HVH.Service.Settings
@@ -16,6 +18,11 @@ namespace HVH.Service.Settings
     /// </summary>
     public class Settings<T> where T : Settings<T>, new()
     {
+        /// <summary>
+        /// Logger
+        /// </summary>
+        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         /// The global settings instance
         /// </summary>
@@ -34,6 +41,7 @@ namespace HVH.Service.Settings
                     // Nullcheck
                     if (section == null)
                     {
+                        log.Fatal("Settings file (settings.ini) is invalid");
                         throw new InvalidSettingsFileException();
                     }
 

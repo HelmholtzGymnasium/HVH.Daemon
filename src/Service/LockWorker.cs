@@ -7,12 +7,19 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Threading;
+using log4net;
 
 namespace HVH.Service.Service
 {
     public class LockWorker
     {
+        /// <summary>
+        /// Logger
+        /// </summary>
+        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         // the process of the app that locks the screen
         private static Process locker;
 
@@ -30,6 +37,7 @@ namespace HVH.Service.Service
                 {
                     locker = Utility.Run("HVH.Service.Lock.exe", "");
                     File.Create(Directory.GetCurrentDirectory() + "/screen.lock");
+                    log.Info("Locking Client Screen");
                 }
             }
         }
@@ -46,6 +54,7 @@ namespace HVH.Service.Service
                     locker.Close();
                     locker = null;
                     File.Delete(Directory.GetCurrentDirectory() + "/screen.lock");
+                    log.Info("Unlocking Client Screen");
                 }
             }
         }

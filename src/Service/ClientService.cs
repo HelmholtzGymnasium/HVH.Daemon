@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
@@ -17,6 +18,7 @@ using HVH.Service.Encryption;
 using HVH.Service.Interfaces;
 using HVH.Service.Plugins;
 using HVH.Service.Settings;
+using log4net;
 
 namespace HVH.Service.Service
 {
@@ -25,6 +27,11 @@ namespace HVH.Service.Service
     /// </summary>
     public class ClientService : ServiceBase
     {
+        /// <summary>
+        /// Logger
+        /// </summary>
+        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         /// The currently active ClientService
         /// </summary>
@@ -74,6 +81,9 @@ namespace HVH.Service.Service
             Instance = this;
             PluginManager.LoadPlugins();
             Threads = new List<Thread>();
+
+            // Say hello!
+            log.Info("Service created");
         }
 
         /// <summary>
@@ -85,7 +95,11 @@ namespace HVH.Service.Service
             worker.Established = ConnectionEstablished;
             worker.Received = DataReceived;
             SessionCreated = false;
-            Threads.Add(Utility.StartThread(LockWorker.Check, true));
+            Threads.Add(Utility.StartThread(LockWorker.Check, true)); 
+            
+            // Say hello!
+            log.Info("Service started");
+            log.Info("Connecting to the server");
         }
 
         /// <summary>
@@ -97,6 +111,7 @@ namespace HVH.Service.Service
         {
             Byte[] buffer = networkData.Buffer;
             buffer = encryption.Decrypt(buffer);
+            log.DebugFormat("Message received. Length: {0}", buffer.Length);
             
             // Do we have a message cached
             if (buffer.Length == 32 && messageBacklog.Count == 0)
@@ -109,10 +124,12 @@ namespace HVH.Service.Service
                     message != Communication.SERVER_SEND_SESSION_CREATED)
                 {
                     // Invalid connection
+                    log.Fatal("Server is talking an invalid connection protocol!");
                     Stop();
                 }
                 else if (message == Communication.SERVER_SEND_HEARTBEAT_CHALLENGE)
                 {
+                    log.Debug("Heartbeat received");
                     connection.Send(Communication.CLIENT_SEND_HEARTBEAT, networkData.RemoteHost, encryption);
                     connection.Send(Environment.UserName, networkData.RemoteHost, encryption); // TODO: This doesnt work. We need a Windows API call for that
                     messageBacklog.Clear();
@@ -120,12 +137,14 @@ namespace HVH.Service.Service
                 else if (message == Communication.SERVER_SEND_LOCK)
                 {
                     // Lock the screen
+                    log.Info("Received Screen lock Signal");
                     LockWorker.LockScreen();
                     messageBacklog.Clear();
                 }
                 else if (message == Communication.SERVER_SEND_UNLOCK)
                 {
                     // Unlock the screen
+                    log.Info("Received Screen unlock Signal");
                     LockWorker.UnlockScreen();
                     messageBacklog.Clear();
                 }
@@ -135,17 +154,32 @@ namespace HVH.Service.Service
                 if (messageBacklog[0] == Communication.SERVER_SEND_SESSION_KEY)
                 {
                     // Load the Encoder Type
-                    Type encoderType = PluginManager.GetType<IEncryptionProvider>(SecuritySettings.Instance.encryption);
-                    encryption = (IEncryptionProvider) Activator.CreateInstance(encoderType);
+                    try
+                    {
+                        Type encoderType = PluginManager.GetType<IEncryptionProvider>(SecuritySettings.Instance.encryption);
+                        encryption = (IEncryptionProvider) Activator.CreateInstance(encoderType);
+                    }
+                    catch (Exception e)
+                    {
+                        log.Error("Invalid Encryption Provider! Falling back to no encryption", e);
+
+                        // Fallback to None
+                        encryption = new NoneEncryptionProvider();
+                    }
+
+                    // Log
+                    log.InfoFormat("Received session key. Used encryption: {0}", encryption.GetType().Name);
 
                     // Apply session key
                     encryption.ChangeKey(buffer);
 
                     // Send session Data
+                    log.Info("Sending session data");
                     connection.Send(Communication.CLIENT_SEND_SESSION_DATA, networkData.RemoteHost, encryption);
                     connection.Send(Environment.MachineName, networkData.RemoteHost, encryption);
                     connection.Send(Environment.UserName, networkData.RemoteHost, encryption);
                     connection.Send(Communication.CLIENT_ID, networkData.RemoteHost, encryption);
+                    log.Info("Sucessfully send session data");
                     sessionDataPending = true;
 
                     messageBacklog.Clear();
@@ -157,10 +191,12 @@ namespace HVH.Service.Service
                     {
                         sessionDataPending = false;
                         SessionCreated = true;
+                        log.Info("Session created");
                     }
                     else
                     {
                         // Invalid connection
+                        log.Info("Invalid connection");
                         Stop();
                     }
 
@@ -172,6 +208,7 @@ namespace HVH.Service.Service
                     Int32 delay = 0;
                     String message = Encoding.UTF8.GetString(buffer);
                     Int32.TryParse(message, out delay);
+                    log.InfoFormat("Received Shutdown Signal. Delay: {0} seconds", delay);
                     ShutdownWorker.Shutdown(delay);
                 }
                 else if (messageBacklog[0] == Communication.SERVER_SEND_REBOOT)
@@ -179,6 +216,7 @@ namespace HVH.Service.Service
                     Int32 delay = 0;
                     String message = Encoding.UTF8.GetString(buffer);
                     Int32.TryParse(message, out delay);
+                    log.InfoFormat("Received Reboot Signal. Delay: {0} seconds", delay);
                     ShutdownWorker.Reboot(delay);
                 }
             }
@@ -191,6 +229,7 @@ namespace HVH.Service.Service
         /// <param name="connection"></param>
         private void ConnectionEstablished(INode node, IConnection connection)
         {
+            log.Info("Connection established. Sending public RSA key.");
             RSAEncryptionProvider rsa = new RSAEncryptionProvider(SecuritySettings.Instance.keySize);
             encryption = rsa;
             connection.Send(Communication.CLIENT_SEND_PUBLIC_KEY, node, new NoneEncryptionProvider());
@@ -203,6 +242,7 @@ namespace HVH.Service.Service
         protected override void OnStop()
         {
             Connection.Client.Close();
+            log.Info("Connection closed");
         }
     }
 }
