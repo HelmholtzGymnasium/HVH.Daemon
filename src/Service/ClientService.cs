@@ -64,8 +64,6 @@ namespace HVH.Service.Service
         // Whether we sent data to the server, waiting for an answer
         private Boolean sessionDataPending = false;
 
-
-
         /// <summary>
         /// Create a new Instance of the service
         /// </summary>
@@ -86,9 +84,6 @@ namespace HVH.Service.Service
             Instance = this;
             PluginManager.LoadPlugins();
             Threads = new List<Thread>();
-
-            // Say hello!
-            log.Info("Service created");
         }
 
         /// <summary>
@@ -103,7 +98,7 @@ namespace HVH.Service.Service
             Threads.Add(Utility.StartThread(LockWorker.Check, true)); 
             
             // Say hello!
-            log.Info("Service started");
+            log.Info("Service Startup");
             log.Info("Connecting to the server");
         }
 
@@ -248,6 +243,58 @@ namespace HVH.Service.Service
         {
             Connection.Client.Close();
             log.Info("Connection closed");
+            log.Info("Service Shutdown");
+        }
+
+        /// <summary>
+        /// When the service gets continued
+        /// </summary>
+        protected override void OnContinue()
+        {
+            log.Info("Service Continued");
+        }
+
+        /// <summary>
+        /// When the service gets paused
+        /// </summary>
+        protected override void OnPause()
+        {
+            log.Info("Service Paused");
+        }
+
+        /// <summary>
+        /// When the service gets shut down
+        /// </summary>
+        protected override void OnShutdown()
+        {
+            log.Info("Service Shutdown");
+        }
+
+        /// <summary>
+        /// The session changes (lock, logon, logoff)
+        /// </summary>
+        /// <param name="changeDescription"></param>
+        protected override void OnSessionChange(SessionChangeDescription changeDescription)
+        {
+            log.Info("Session Changed: " + changeDescription.Reason + " (ID: " + changeDescription.SessionId + ")");
+            log.Info("Current User: " + Win32.GetUsername(changeDescription.SessionId));
+        }
+
+        /// <summary>
+        /// The service receives a custom command
+        /// </summary>
+        protected override void OnCustomCommand(Int32 command)
+        {
+            log.Info("Custom Command received: " + command);
+        }
+
+        /// <summary>
+        /// The power status of the computer changes
+        /// </summary>
+        protected override Boolean OnPowerEvent(PowerBroadcastStatus powerStatus)
+        {
+            log.Info("PowerStatus changed: " + powerStatus);
+            return base.OnPowerEvent(powerStatus);
         }
     }
 }
