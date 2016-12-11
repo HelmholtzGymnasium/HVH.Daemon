@@ -25,7 +25,7 @@ namespace HVH.Service.Lock
         /// <summary>
         /// Logger
         /// </summary>
-        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private static Int32 counter;
         private static DateTime time;

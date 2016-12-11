@@ -18,7 +18,7 @@ namespace HVH.Service.Service
         /// <summary>
         /// Logger
         /// </summary>
-        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         // the process of the app that locks the screen
         private static Process locker;

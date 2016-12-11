@@ -31,7 +31,7 @@ namespace HVH.Service.Service
         /// <summary>
         /// Logger
         /// </summary>
-        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// The currently active ClientService

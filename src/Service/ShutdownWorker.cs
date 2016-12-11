@@ -19,7 +19,7 @@ namespace HVH.Service.Service
         /// <summary>
         /// Logger
         /// </summary>
-        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static void Shutdown(Int32 delay)
         {
