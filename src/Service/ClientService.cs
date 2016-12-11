@@ -131,7 +131,7 @@ namespace HVH.Service.Service
                 {
                     log.Debug("Heartbeat received");
                     connection.Send(Communication.CLIENT_SEND_HEARTBEAT, networkData.RemoteHost, encryption);
-                    connection.Send(Environment.UserName, networkData.RemoteHost, encryption); // TODO: This doesnt work. We need a Windows API call for that
+                    connection.Send(Win32.GetUsername(Win32.WTSGetActiveConsoleSessionId()), networkData.RemoteHost, encryption);
                     messageBacklog.Clear();
                 }
                 else if (message == Communication.SERVER_SEND_LOCK)
@@ -177,7 +177,7 @@ namespace HVH.Service.Service
                     log.Info("Sending session data");
                     connection.Send(Communication.CLIENT_SEND_SESSION_DATA, networkData.RemoteHost, encryption);
                     connection.Send(Environment.MachineName, networkData.RemoteHost, encryption);
-                    connection.Send(Environment.UserName, networkData.RemoteHost, encryption);
+                    connection.Send(Win32.GetUsername(Win32.WTSGetActiveConsoleSessionId()), networkData.RemoteHost, encryption);
                     connection.Send(Communication.CLIENT_ID, networkData.RemoteHost, encryption);
                     log.Info("Sucessfully send session data");
                     sessionDataPending = true;
