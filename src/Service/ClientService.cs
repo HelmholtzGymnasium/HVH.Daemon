@@ -130,7 +130,7 @@ namespace HVH.Service.Service
                 else if (message == Communication.SERVER_SEND_HEARTBEAT_CHALLENGE)
                 {
                     log.Debug("Heartbeat received");
-                    connection.Send(Communication.CLIENT_SEND_HEARTBEAT, networkData.RemoteHost, encryption);
+                    connection.Send(Communication.DAEMON_SEND_HEARTBEAT, networkData.RemoteHost, encryption);
                     connection.Send(Win32.GetUsername(Win32.WTSGetActiveConsoleSessionId()), networkData.RemoteHost, encryption);
                     messageBacklog.Clear();
                 }
@@ -175,10 +175,10 @@ namespace HVH.Service.Service
 
                     // Send session Data
                     log.Info("Sending session data");
-                    connection.Send(Communication.CLIENT_SEND_SESSION_DATA, networkData.RemoteHost, encryption);
+                    connection.Send(Communication.DAEMON_SEND_SESSION_DATA, networkData.RemoteHost, encryption);
                     connection.Send(Environment.MachineName, networkData.RemoteHost, encryption);
                     connection.Send(Win32.GetUsername(Win32.WTSGetActiveConsoleSessionId()), networkData.RemoteHost, encryption);
-                    connection.Send(Communication.CLIENT_ID, networkData.RemoteHost, encryption);
+                    connection.Send(Communication.DAEMON_ID, networkData.RemoteHost, encryption);
                     log.Info("Sucessfully send session data");
                     sessionDataPending = true;
 
@@ -232,7 +232,7 @@ namespace HVH.Service.Service
             log.Info("Connection established. Sending public RSA key.");
             RSAEncryptionProvider rsa = new RSAEncryptionProvider(SecuritySettings.Instance.keySize);
             encryption = rsa;
-            connection.Send(Communication.CLIENT_SEND_PUBLIC_KEY, node, new NoneEncryptionProvider());
+            connection.Send(Communication.DAEMON_SEND_PUBLIC_KEY, node, new NoneEncryptionProvider());
             connection.Send(rsa.key.ToXmlString(false), node, new NoneEncryptionProvider());
         }
 
