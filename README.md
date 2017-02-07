@@ -17,8 +17,8 @@ encryption=NoneEncryptionProvider
 The rest is configured dynamically through the server.
 
 ### License
-HVH.Client as is is licensed under the MIT License. It provides interfaces for loading additional components, who can be licensed differently. The whole project has no global license, unless otherwise specified, the parts are licensed as All Rights Reserved and currently not open sourced.
+HVH.Service as is is licensed under the MIT License. It provides interfaces for loading additional components, who can be licensed differently. The whole project has no global license, unless otherwise specified, the parts are licensed as All Rights Reserved and currently not open sourced.
 
 ### Credits
-HVH.Client is written by Dorian Stoll (@StollD)
+HVH.Service is written by Dorian Stoll (@StollD)
 The whole project is maintained by Dorian Stoll and Kai Münch.

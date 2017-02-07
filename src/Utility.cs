@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using Helios.Net;
 using Helios.Topology;
-using HVH.Service.Interfaces;
+using HVH.Common.Interfaces;
 using log4net;
 
 namespace HVH.Service

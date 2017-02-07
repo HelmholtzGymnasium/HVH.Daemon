@@ -53,26 +53,17 @@
     <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection\Communication.cs" />
-    <Compile Include="Encryption\NoneEncryptionProvider.cs" />
-    <Compile Include="Encryption\RSAEncryptionProvider.cs" />
-    <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Service\ClientService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Connection\ConnectionWorker.cs" />
-    <Compile Include="Exceptions\InvalidSettingsFileException.cs" />
-    <Compile Include="Interfaces\IEncryptionProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Service\LockWorker.cs" />
+    <Compile Include="Service\ProcessWorker.cs" />
     <Compile Include="Service\ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ShutdownWorker.cs" />
-    <Compile Include="Settings\SecuritySettings.cs" />
-    <Compile Include="Settings\ConnectionSettings.cs" />
-    <Compile Include="Settings\Settings.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Win32.cs" />
   </ItemGroup>
@@ -81,6 +72,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\common\src\HVH.Common.csproj">
+      <Project>{92d0a93a-89ad-46fe-94be-3b5f5f3410e6}</Project>
+      <Name>HVH.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -14,11 +14,11 @@ using System.Text;
 using System.Threading;
 using Helios.Net;
 using Helios.Topology;
-using HVH.Service.Connection;
-using HVH.Service.Encryption;
-using HVH.Service.Interfaces;
-using HVH.Service.Plugins;
-using HVH.Service.Settings;
+using HVH.Common.Connection;
+using HVH.Common.Encryption;
+using HVH.Common.Interfaces;
+using HVH.Common.Plugins;
+using HVH.Common.Settings;
 using log4net;
 
 namespace HVH.Service.Service

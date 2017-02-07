@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\HVH.Service.csproj">
-      <Project>{b0bf3eac-c203-4de0-b7dc-bfc46149ec49}</Project>
-      <Name>HVH.Service</Name>
+    <ProjectReference Include="..\common\src\HVH.Common.csproj">
+      <Project>{92d0a93a-89ad-46fe-94be-3b5f5f3410e6}</Project>
+      <Name>HVH.Common</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

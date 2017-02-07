@@ -7,7 +7,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using HVH.Service.Interfaces;
+using HVH.Common.Interfaces;
 
 namespace HVH.Service.Encryptions
 {
