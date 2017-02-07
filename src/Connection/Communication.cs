@@ -1,6 +1,6 @@
 ﻿/**
  * HVH.Service - Service that can manage client computers
- * Copyright (c) Dorian Stoll 2016
+ * Copyright (c) Dorian Stoll 2017
  * Licensed under the terms of the MIT License
  */
 
