@@ -5,11 +5,11 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Service", "src\HVH.Service.csproj", "{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Service.Encryptions", "encryptions\HVH.Service.Encryptions.csproj", "{FECEAD95-233F-424A-83DD-3903D29FD080}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Service.Lock", "screenlock\HVH.Service.Lock.csproj", "{EDE96712-6B34-4590-8EB7-4EB24B9055F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Common", "common\src\HVH.Common.csproj", "{92D0A93A-89AD-46FE-94BE-3B5F5F3410E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HVH.Common.Encryptions", "common\encryptions\HVH.Common.Encryptions.csproj", "{FECEAD95-233F-424A-83DD-3903D29FD080}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0BF3EAC-C203-4DE0-B7DC-BFC46149EC49}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FECEAD95-233F-424A-83DD-3903D29FD080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FECEAD95-233F-424A-83DD-3903D29FD080}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FECEAD95-233F-424A-83DD-3903D29FD080}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FECEAD95-233F-424A-83DD-3903D29FD080}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDE96712-6B34-4590-8EB7-4EB24B9055F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EDE96712-6B34-4590-8EB7-4EB24B9055F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDE96712-6B34-4590-8EB7-4EB24B9055F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{92D0A93A-89AD-46FE-94BE-3B5F5F3410E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92D0A93A-89AD-46FE-94BE-3B5F5F3410E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92D0A93A-89AD-46FE-94BE-3B5F5F3410E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECEAD95-233F-424A-83DD-3903D29FD080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECEAD95-233F-424A-83DD-3903D29FD080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECEAD95-233F-424A-83DD-3903D29FD080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECEAD95-233F-424A-83DD-3903D29FD080}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
