@@ -75,7 +75,6 @@ namespace HVH.Service.Lock
                 form.ResumeLayout(false);
 
                 // Listen to the mjpeg stream
-                MessageBox.Show(new Uri(args[0]).AbsoluteUri);
                 MjpegDecoder decoder = new MjpegDecoder();
                 try
                 {
