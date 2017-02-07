@@ -91,7 +91,7 @@ namespace HVH.Service.Connection
         /// <summary>
         /// Server goes offline
         /// </summary>
-        public const String SERVER_SEND_DISCONNECTION = "b503a21db88c40a0b2195cbdc913651b";
+        public const String SERVER_SEND_DISCONNECT = "b503a21db88c40a0b2195cbdc913651b";
 
         /// <summary>
         /// Server sends the command to lock the client pc

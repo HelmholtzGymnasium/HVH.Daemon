@@ -112,13 +112,14 @@ namespace HVH.Service.Service
             Byte[] buffer = networkData.Buffer;
             buffer = encryption.Decrypt(buffer);
             log.DebugFormat("Message received. Length: {0}", buffer.Length);
-            
+
+            String message = Encoding.UTF8.GetString(buffer);
+            if (message != Communication.SERVER_SEND_WAIT_SIGNAL)
+                messageBacklog.Add(message);
+
             // Do we have a message cached
             if (buffer.Length == 32 && messageBacklog.Count == 0)
             {
-                String message = Encoding.UTF8.GetString(buffer);
-                messageBacklog.Add(message);
-
                 // Handle messages who dont have additional parameters  
                 if (!SessionCreated && sessionDataPending &&
                     message != Communication.SERVER_SEND_SESSION_CREATED)
@@ -147,6 +148,13 @@ namespace HVH.Service.Service
                     log.Info("Received Screen unlock Signal");
                     LockWorker.UnlockScreen();
                     messageBacklog.Clear();
+                }
+                else if (message == Communication.SERVER_SEND_DISCONNECT)
+                {
+                    // Server has gone offline, go and die too
+                    log.Fatal("Server went offline.");
+                    Connection.Client.Close();
+                    Stop();
                 }
             }
             else if (messageBacklog.Any())
@@ -186,7 +194,6 @@ namespace HVH.Service.Service
                 }
                 else if (!SessionCreated && sessionDataPending && messageBacklog[0] == Communication.SERVER_SEND_SESSION_CREATED)
                 {
-                    String message = Encoding.UTF8.GetString(buffer);
                     if (message == Communication.SERVER_ID)
                     {
                         sessionDataPending = false;
@@ -206,7 +213,6 @@ namespace HVH.Service.Service
                 else if (messageBacklog[0] == Communication.SERVER_SEND_SHUTDOWN)
                 {
                     Int32 delay = 0;
-                    String message = Encoding.UTF8.GetString(buffer);
                     Int32.TryParse(message, out delay);
                     log.InfoFormat("Received Shutdown Signal. Delay: {0} seconds", delay);
                     ShutdownWorker.Shutdown(delay);
@@ -214,10 +220,24 @@ namespace HVH.Service.Service
                 else if (messageBacklog[0] == Communication.SERVER_SEND_REBOOT)
                 {
                     Int32 delay = 0;
-                    String message = Encoding.UTF8.GetString(buffer);
                     Int32.TryParse(message, out delay);
                     log.InfoFormat("Received Reboot Signal. Delay: {0} seconds", delay);
                     ShutdownWorker.Reboot(delay);
+                }
+                else if (messageBacklog[0] == Communication.SERVER_SEND_FORBIDDEN_PROCESSES)
+                {
+                    String[] news = message.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                    ProcessWorker.Add(news);
+                    log.InfoFormat("Added {0} entries to the list of forbidden processes", news.Length);
+                    messageBacklog.Clear();
+                }
+                else if (messageBacklog[0] == Communication.SERVER_SEND_FORBIDDEN_PROCESSES_CLEAR)
+                {
+                    String[] news = message.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    ProcessWorker.Reset();
+                    ProcessWorker.Add(news);
+                    log.InfoFormat("Cleared the current data adn added {0} entries to the list of forbidden processes", news.Length);
+                    messageBacklog.Clear();
                 }
             }
         }
