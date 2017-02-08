@@ -143,6 +143,7 @@ namespace HVH.Service.Service
                 {
                     // Invalid connection
                     log.Fatal("Server is talking an invalid connection protocol!");
+                    Connection.Client.Close();
                     Stop();
                 }
                 else if (message == Communication.SERVER_SEND_HEARTBEAT_CHALLENGE)
