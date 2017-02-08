@@ -21,6 +21,7 @@ using HVH.Common.Interfaces;
 using HVH.Common.Plugins;
 using HVH.Common.Settings;
 using log4net;
+using log4net.Config;
 
 namespace HVH.Service.Service
 {
@@ -70,6 +71,9 @@ namespace HVH.Service.Service
         /// </summary>
         public ClientService()
         {
+            // Init log4net
+            XmlConfigurator.Configure();
+
             // Create dirs
             Directory.CreateDirectory("logs/");
             Directory.CreateDirectory("plugins/");
