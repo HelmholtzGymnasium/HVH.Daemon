@@ -12,6 +12,7 @@ using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
+using Helios.Exceptions;
 using Helios.Net;
 using Helios.Topology;
 using HVH.Common.Connection;
@@ -84,6 +85,7 @@ namespace HVH.Service.Service
             Instance = this;
             PluginManager.LoadPlugins();
             Threads = new List<Thread>();
+            messageBacklog = new List<String>();
         }
 
         /// <summary>
@@ -91,15 +93,30 @@ namespace HVH.Service.Service
         /// </summary>
         protected override void OnStart(String[] args)
         {
-            ConnectionWorker worker = new ConnectionWorker(ConnectionSettings.Instance.server, ConnectionSettings.Instance.port);
-            worker.Established = ConnectionEstablished;
-            worker.Received = DataReceived;
+            Connection = new ConnectionWorker(ConnectionSettings.Instance.server, ConnectionSettings.Instance.port);
+            Connection.Established = ConnectionEstablished;
+            Connection.Received = DataReceived;
+            Connection.Terminated = ConnectionTerminated;
             SessionCreated = false;
             Threads.Add(Utility.StartThread(LockWorker.Check, true)); 
             
             // Say hello!
             log.Info("Service Startup");
             log.Info("Connecting to the server");
+        }
+
+        /// <summary>
+        /// Handles the login procedure for the Server
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="connection"></param>
+        private void ConnectionEstablished(INode node, IConnection connection)
+        {
+            log.Info("Connection established. Sending public RSA key.");
+            RSAEncryptionProvider rsa = new RSAEncryptionProvider(SecuritySettings.Instance.keySize);
+            encryption = rsa;
+            connection.Send(Communication.DAEMON_SEND_PUBLIC_KEY, node, new NoneEncryptionProvider());
+            connection.Send(rsa.key.ToXmlString(false), node, new NoneEncryptionProvider());
         }
 
         /// <summary>
@@ -243,17 +260,16 @@ namespace HVH.Service.Service
         }
 
         /// <summary>
-        /// Handles the login procedure for the Server
+        /// Handles an abrupt termination of the connection
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="heliosConnectionException"></param>
         /// <param name="connection"></param>
-        private void ConnectionEstablished(INode node, IConnection connection)
+        private void ConnectionTerminated(HeliosConnectionException heliosConnectionException, IConnection connection)
         {
-            log.Info("Connection established. Sending public RSA key.");
-            RSAEncryptionProvider rsa = new RSAEncryptionProvider(SecuritySettings.Instance.keySize);
-            encryption = rsa;
-            connection.Send(Communication.DAEMON_SEND_PUBLIC_KEY, node, new NoneEncryptionProvider());
-            connection.Send(rsa.key.ToXmlString(false), node, new NoneEncryptionProvider());
+            // Server has gone offline, go and die too
+            log.FatalFormat("Server went offline. Reason: {0}", heliosConnectionException.Message);
+            Connection.Client.Close();
+            Stop();
         }
 
         /// <summary>
