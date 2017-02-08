@@ -143,6 +143,7 @@ namespace HVH.Service.Service
                 {
                     // Invalid connection
                     log.Fatal("Server is talking an invalid connection protocol!");
+                    connection.Send(Communication.DAEMON_SEND_DISCONNECT, networkData.RemoteHost, encryption);
                     Connection.Client.Close();
                     Stop();
                 }
@@ -171,6 +172,7 @@ namespace HVH.Service.Service
                 {
                     // Server has gone offline, go and die too
                     log.Fatal("Server went offline.");
+                    connection.Send(Communication.DAEMON_SEND_DISCONNECT, networkData.RemoteHost, encryption);
                     Connection.Client.Close();
                     Stop();
                 }
@@ -222,6 +224,8 @@ namespace HVH.Service.Service
                     {
                         // Invalid connection
                         log.Info("Invalid connection");
+                        connection.Send(Communication.DAEMON_SEND_DISCONNECT, networkData.RemoteHost, encryption);
+                        Connection.Client.Close();
                         Stop();
                     }
 
@@ -278,6 +282,7 @@ namespace HVH.Service.Service
         /// </summary>
         protected override void OnStop()
         {
+            Connection.Client.Send(Communication.DAEMON_SEND_DISCONNECT, Connection.Client.RemoteHost, encryption);
             Connection.Client.Close();
             log.Info("Connection closed");
             log.Info("Service Shutdown");
