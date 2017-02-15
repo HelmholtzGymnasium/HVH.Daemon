@@ -121,6 +121,7 @@ namespace HVH.Service.Service
             encryption = rsa;
             connection.Send(Communication.DAEMON_SEND_PUBLIC_KEY, node, new NoneEncryptionProvider());
             connection.Send(rsa.key.ToXmlString(false), node, new NoneEncryptionProvider());
+            connection.BeginReceive();
         }
 
         /// <summary>
