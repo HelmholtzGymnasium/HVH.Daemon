@@ -26,6 +26,11 @@ namespace HVH.Service.Lock
         /// Logger
         /// </summary>
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
+        public static String CurrentDirectory
+        {
+            get { return Path.GetDirectoryName(typeof(Program).Assembly.Location); }
+        }
 
         private static Int32 counter;
         private static DateTime time;
@@ -134,7 +139,7 @@ namespace HVH.Service.Lock
                         if (split.Length == 2 && pc.ValidateCredentials(split[0], split[1]))
                         {
                             log.Info("Account data is correct, unlocking client computer");
-                            File.Delete(Directory.GetCurrentDirectory() + "/screen.lock");
+                            File.Delete(CurrentDirectory + "/screen.lock");
                             Environment.Exit(0); // Kill the lock
                         }
                         else

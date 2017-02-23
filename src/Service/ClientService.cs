@@ -95,7 +95,11 @@ namespace HVH.Service.Service
         /// <summary>
         /// Called when the service is started. Loads settings, and tries to connect to the server
         /// </summary>
+#if !DEBUG
         protected override void OnStart(String[] args)
+#else
+        public void OnStart()
+#endif
         {
             Connection = new ConnectionWorker(ConnectionSettings.Instance.server, ConnectionSettings.Instance.port);
             Connection.Established = ConnectionEstablished;
@@ -131,7 +135,7 @@ namespace HVH.Service.Service
         /// <param name="connection"></param>
         private void DataReceived(NetworkData networkData, IConnection connection)
         {
-            Byte[] buffer = networkData.Buffer;
+            Byte[] buffer = networkData.Buffer.ToArray();
             buffer = encryption.Decrypt(buffer);
             log.DebugFormat("Message received. Length: {0}", buffer.Length);
 
@@ -140,7 +144,7 @@ namespace HVH.Service.Service
                 messageBacklog.Add(message);
 
             // Do we have a message cached
-            if (buffer.Length == 32 && messageBacklog.Count == 0)
+            if (buffer.Length == 32 && messageBacklog.Count == 1)
             {
                 // Handle messages who dont have additional parameters  
                 if (!SessionCreated && sessionDataPending &&
@@ -182,7 +186,7 @@ namespace HVH.Service.Service
                     Stop();
                 }
             }
-            else if (messageBacklog.Any())
+            else if (messageBacklog.Count > 1)
             {
                 if (messageBacklog[0] == Communication.SERVER_SEND_SESSION_KEY)
                 {
@@ -285,7 +289,11 @@ namespace HVH.Service.Service
         /// <summary>
         /// Finalizes the connection
         /// </summary>
+#if !DEBUG
         protected override void OnStop()
+#else
+        public void OnStop()
+#endif
         {
             Connection.Client.Send(Communication.DAEMON_SEND_DISCONNECT, Connection.Client.RemoteHost, encryption);
             Connection.Client.Close();

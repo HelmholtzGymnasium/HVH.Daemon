@@ -13,6 +13,7 @@ using Helios.Net;
 using Helios.Topology;
 using HVH.Common.Interfaces;
 using log4net;
+using System.IO;
 
 namespace HVH.Service
 {
@@ -25,6 +26,11 @@ namespace HVH.Service
         /// Logger
         /// </summary>
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        public static String CurrentDirectory
+        {
+            get { return Path.GetDirectoryName(typeof(Utility).Assembly.Location); }
+        }
 
         /// <summary>
         /// Starts a new thread

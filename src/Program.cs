@@ -6,6 +6,7 @@
 
 using System.ServiceProcess;
 using HVH.Service.Service;
+using System;
 
 namespace HVH.Service
 {
@@ -19,11 +20,17 @@ namespace HVH.Service
         /// </summary>
         public static void Main()
         {
+#if !DEBUG
             ServiceBase[] ServicesToRun = 
             {
                 new ClientService()
             };
             ServiceBase.Run(ServicesToRun);
+#else
+            new ClientService().OnStart();
+
+            while (true) Console.ReadLine();
+#endif
         }
     }
 }

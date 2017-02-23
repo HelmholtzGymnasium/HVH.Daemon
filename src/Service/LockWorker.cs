@@ -36,7 +36,7 @@ namespace HVH.Service.Service
                 if (locker == null)
                 {
                     locker = Utility.Run("HVH.Service.Lock.exe", "");
-                    File.Create(Directory.GetCurrentDirectory() + "/screen.lock");
+                    File.Create(Utility.CurrentDirectory + "/screen.lock");
                     log.Info("Locking Client Screen");
                 }
             }
@@ -53,7 +53,7 @@ namespace HVH.Service.Service
                 {
                     locker.Close();
                     locker = null;
-                    File.Delete(Directory.GetCurrentDirectory() + "/screen.lock");
+                    File.Delete(Utility.CurrentDirectory + "/screen.lock");
                     log.Info("Unlocking Client Screen");
                 }
             }
@@ -66,9 +66,9 @@ namespace HVH.Service.Service
         {
             while (true)
             {
-                if (File.Exists(Directory.GetCurrentDirectory() + "/screen.lock") && locker == null)
+                if (File.Exists(Utility.CurrentDirectory + "/screen.lock") && locker == null)
                     LockScreen();
-                else if (!File.Exists(Directory.GetCurrentDirectory() + "/screen.lock") && locker != null)
+                else if (!File.Exists(Utility.CurrentDirectory + "/screen.lock") && locker != null)
                     UnlockScreen();
                 Thread.Sleep(100);
             }
